@@ -1,9 +1,26 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Q-Learning and DQN</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
-<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="mdp.html">Prev</a><a href="policy-gradient.html">Next</a></nav></div></header>
-<main class="container">
-<section class="hero"><span class="badge">Algorithm</span><h1>From Q-Table to Deep Q Network</h1><p class="subtitle">Q-Learning learns action values directly. DQN uses a neural network when states are too many for a table.</p></section>
-<section class="grid cols-2"><article class="card"><h2>Q-Learning Update</h2><div class="example">Q(s,a) ← Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]</div><ul><li>α = learning rate</li><li>γ = discount factor</li><li>Bootstrap target from next state's best action</li></ul></article>
-<article class="card"><h2>Why DQN worked well (easy view)</h2><ul><li><strong>Replay buffer:</strong> random mini-batches reduce correlation.</li><li><strong>Target network:</strong> stable training target.</li><li><strong>Reward clipping:</strong> smoother optimization.</li></ul><p class="note">Good for high-dimensional spaces like images in Atari.</p></article></section>
-<section class="card"><h2>Mini Walkthrough Example</h2><p>State: game frame features. Action: left/right/jump/fire. Reward: game score change. The model predicts Q-values for all actions and picks the max during exploitation. During training, it sometimes takes random action for exploration.</p></section>
-</main><footer class="footer">Developed by Sajjan Singh.</footer></body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DQN + Q-Learning Mini Lesson</title>
+<meta name="description" content="From tabular Q-learning to DQN with practical stabilizers and an update calculator." />
+<meta property="og:title" content="DQN + Q-learning Mini Lesson" />
+<meta property="og:description" content="Learn bootstrapping, replay buffers, target networks, and practical update math." />
+<link rel="stylesheet" href="../assets/css/style.css" />
+</head><body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="nav"><a class="brand" href="../index.html">RL Atelier</a><button class="nav-toggle" data-nav-toggle aria-expanded="false">Menu</button><nav class="nav-links"><a href="../index.html">Home</a><a href="mdp.html">MDP</a><a href="dqn-qlearning.html" aria-current="page">DQN / Q</a><a href="policy-gradient.html">Policy Gradient</a></nav></div></header>
+<main id="main" class="container">
+<section class="hero"><span class="eyebrow">Track 04</span><h1>Q-Learning to DQN</h1><p class="subtitle">Q-learning works with tables in small state spaces. DQN approximates Q-values with neural networks for larger observations.</p></section>
+<div class="lesson-layout"><aside class="lesson-sidebar card"><h2>Lesson map</h2><ol><li><a href="#intuition">Intuition</a></li><li><a href="#formalism">Formalism</a></li><li><a href="#example">Worked Example</a></li><li><a href="#demo">Interactive Demo</a></li><li><a href="#mistakes">Common Mistakes</a></li><li><a href="#quiz">Quick Quiz</a></li><li><a href="#summary">Summary</a></li></ol></aside><div>
+<section id="intuition" class="lesson-section"><h2>Intuition</h2><p>Estimate “how good” each action is in each state, then choose high-value actions while still exploring.</p></section>
+<section id="formalism" class="lesson-section"><h2>Formalism</h2><div class="callout">Q(s,a) ← Q(s,a) + α[r + γ max_a'Q(s',a') - Q(s,a)]</div><p>DQN keeps same target idea but replaces table lookup with Qθ(s,a) from a neural network.</p></section>
+<section id="example" class="lesson-section"><h2>Worked Example</h2><p>If current Q is 0.50, reward is 1, max next Q is 0.70, α=0.1, γ=0.9, target is 1.63 and updated Q moves toward it.</p></section>
+<section id="demo" class="lesson-section"><h2>Interactive Demo</h2><div class="demo-grid"><div><label for="q-old">Current Q(s,a)</label><input id="q-old" type="number" step="0.01" value="0.50" /><label for="q-reward">Reward r</label><input id="q-reward" type="number" step="0.01" value="1.00" /><label for="q-next">max Q(s',a')</label><input id="q-next" type="number" step="0.01" value="0.70" /></div><div><label for="q-alpha">Learning rate α</label><input id="q-alpha" type="number" step="0.01" value="0.10" /><label for="q-gamma">Discount γ</label><input id="q-gamma" type="number" step="0.01" value="0.90" /><button type="button" id="calc-q">Compute update</button><p>Updated Q = <strong id="q-result">—</strong></p><div class="callout ok"><strong>Stability tricks:</strong> replay buffer + target network + reward scaling.</div></div></div></section>
+<section id="mistakes" class="lesson-section"><h2>Common Mistakes</h2><div class="callout warn"><ul><li>Using too-high learning rates with bootstrapped targets.</li><li>No replay warmup before gradient updates.</li><li>Updating target network too frequently.</li></ul></div></section>
+<section id="quiz" class="lesson-section"><h2>Quick Quiz</h2><form class="quiz" data-answer="b"><fieldset><label><input type="radio" name="d-q" value="a" /> Replay buffer increases sample correlation.</label><label><input type="radio" name="d-q" value="b" /> Target networks reduce moving-target instability.</label><label><input type="radio" name="d-q" value="c" /> DQN removes the need for exploration.</label></fieldset><button type="button" data-quiz-check>Check answer</button><p class="quiz-output"></p></form></section>
+<section id="summary" class="lesson-section"><h2>Summary</h2><p>DQN is still Bellman learning — just with function approximation and stabilization engineering.</p><a class="button" href="policy-gradient.html">Next: Policy Gradient</a></section>
+</div></div>
+</main>
+<footer class="site-footer">Track 04 of 06</footer>
+<script src="../assets/js/main.js"></script>
+</body></html>

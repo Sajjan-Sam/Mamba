@@ -1,22 +1,30 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Bandits</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
-<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="fundamentals.html">Prev</a><a href="mdp.html">Next</a></nav></div></header>
-<main class="container">
-<section class="hero"><span class="badge">Interactive Demo</span><h1>Multi-Armed Bandits</h1><p class="subtitle">A bandit has many slot-machine arms. Each arm has unknown payout. You must balance <strong>exploration</strong> and <strong>exploitation</strong>.</p></section>
-<section class="grid cols-2"><article class="card"><h2>How epsilon-greedy works</h2><ul><li>With probability ε, try random arm (explore).</li><li>With probability 1-ε, choose best-known arm (exploit).</li><li>Update average reward estimate after each pull.</li></ul><button id="pull">Pull 1 Arm</button><p class="note" id="bandit-log">Click to start simulation.</p></article>
-<article class="card"><h2>Live estimates</h2><p>Arm A estimate: <span id="est-a">0.00</span></p><p>Arm B estimate: <span id="est-b">0.00</span></p><p>Arm C estimate: <span id="est-c">0.00</span></p><p>Total reward: <span id="total">0.00</span></p></article></section>
-</main><footer class="footer">Developed by Sajjan Singh.</footer>
-<script>
-const trueMeans=[0.3,0.6,0.8], est=[0,0,0], count=[0,0,0]; let total=0, step=0; const eps=0.2;
-function pick(){ if(Math.random()<eps) return Math.floor(Math.random()*3); return est.indexOf(Math.max(...est)); }
-function reward(i){ return Math.random()<trueMeans[i]?1:0; }
-function upd(){
- const i=pick(), r=reward(i); step++; total+=r; count[i]++; est[i]+= (r-est[i])/count[i];
- document.getElementById('est-a').textContent=est[0].toFixed(2);
- document.getElementById('est-b').textContent=est[1].toFixed(2);
- document.getElementById('est-c').textContent=est[2].toFixed(2);
- document.getElementById('total').textContent=total.toFixed(2);
- document.getElementById('bandit-log').textContent=`Step ${step}: picked arm ${String.fromCharCode(65+i)}, reward ${r}`;
-}
-document.getElementById('pull').addEventListener('click',upd);
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bandits Mini Lesson</title>
+  <meta name="description" content="Multi-armed bandit mini lesson with epsilon-greedy interactive simulation." />
+  <meta property="og:title" content="Bandits Mini Lesson" />
+  <meta property="og:description" content="Learn exploration vs exploitation with a tuned epsilon-greedy demo." />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="nav"><a class="brand" href="../index.html">RL Atelier</a><button class="nav-toggle" data-nav-toggle aria-expanded="false">Menu</button><nav class="nav-links"><a href="../index.html">Home</a><a href="fundamentals.html">Fundamentals</a><a href="bandits.html" aria-current="page">Bandits</a><a href="mdp.html">MDP</a></nav></div></header>
+<main id="main" class="container">
+  <section class="hero"><span class="eyebrow">Track 02</span><h1>Multi-Armed Bandits</h1><p class="subtitle">Bandits isolate one RL core tension: do you exploit your current best arm, or explore uncertain options?</p></section>
+  <div class="lesson-layout"><aside class="lesson-sidebar card"><h2>Lesson map</h2><ol><li><a href="#intuition">Intuition</a></li><li><a href="#formalism">Formalism</a></li><li><a href="#example">Worked Example</a></li><li><a href="#demo">Interactive Demo</a></li><li><a href="#mistakes">Common Mistakes</a></li><li><a href="#quiz">Quick Quiz</a></li><li><a href="#summary">Summary</a></li></ol></aside>
+  <div>
+    <section id="intuition" class="lesson-section"><h2>Intuition</h2><p>If you over-exploit early, you can lock onto a mediocre arm. Exploration is a deliberate cost paid for better estimates.</p></section>
+    <section id="formalism" class="lesson-section"><h2>Formalism</h2><p>ε-greedy policy: choose random arm with probability ε, else choose arm with highest estimated value.</p><div class="callout">Action rule: <strong>a_t = random</strong> with ε, otherwise <strong>argmax_a Q_t(a)</strong>.</div></section>
+    <section id="example" class="lesson-section"><h2>Worked Example</h2><p>With true means [0.22, 0.52, 0.74], arm C is optimal but unknown. Early random pulls help discover C.</p></section>
+    <section id="demo" class="lesson-section"><h2>Interactive Demo</h2><div class="demo-grid"><div><label for="epsilon">Exploration ε</label><input id="epsilon" type="range" min="0" max="0.6" step="0.05" value="0.2" /><label for="rounds">Pulls per click</label><select id="rounds"><option>1</option><option>10</option><option selected>50</option><option>200</option></select><button type="button" id="bandit-run">Run simulation</button><p id="bandit-log">No pulls yet.</p><p>Total reward: <strong id="bandit-total">0.00</strong></p></div><div><div class="stat-row"><span>Arm A est: <strong id="est-a">0.00</strong></span><span>n=<span id="cnt-a">0</span></span></div><div class="bar-wrap"><span id="bar-a" class="bar" style="width:3%"></span></div><div class="stat-row"><span>Arm B est: <strong id="est-b">0.00</strong></span><span>n=<span id="cnt-b">0</span></span></div><div class="bar-wrap"><span id="bar-b" class="bar" style="width:3%"></span></div><div class="stat-row"><span>Arm C est: <strong id="est-c">0.00</strong></span><span>n=<span id="cnt-c">0</span></span></div><div class="bar-wrap"><span id="bar-c" class="bar" style="width:3%"></span></div></div></div></section>
+    <section id="mistakes" class="lesson-section"><h2>Common Mistakes</h2><div class="callout warn"><ul><li>Keeping ε fixed forever (no annealing).</li><li>Comparing algorithms with too few pulls.</li><li>Ignoring non-stationary rewards.</li></ul></div></section>
+    <section id="quiz" class="lesson-section"><h2>Quick Quiz</h2><form class="quiz" data-answer="c"><fieldset><label><input type="radio" name="b-q" value="a" /> ε=0 guarantees best long-term performance from step 1.</label><label><input type="radio" name="b-q" value="b" /> Exploration is only useful if all arms are equal.</label><label><input type="radio" name="b-q" value="c" /> Moderate ε helps avoid committing too early.</label></fieldset><button type="button" data-quiz-check>Check answer</button><p class="quiz-output"></p></form></section>
+    <section id="summary" class="lesson-section"><h2>Summary</h2><p>Bandits teach uncertainty-aware decision making, a pattern reused in full MDP algorithms.</p><a class="button" href="mdp.html">Next: MDP</a></section>
+  </div></div>
+</main>
+<footer class="site-footer">Track 02 of 06</footer>
+<script src="../assets/js/main.js"></script>
+</body></html>

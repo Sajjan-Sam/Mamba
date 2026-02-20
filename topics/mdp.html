@@ -1,15 +1,25 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MDP and Bellman</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
-<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="bandits.html">Prev</a><a href="dqn-qlearning.html">Next</a></nav></div></header>
-<main class="container">
-<section class="hero"><span class="badge">Core Theory</span><h1>Markov Decision Process + Bellman Intuition</h1><p class="subtitle">MDP = (S, A, P, R, γ). Markov means future depends only on current state and action (not full history).</p></section>
-<section class="grid cols-2"><article class="card"><h2>Bellman Optimality (easy words)</h2><p>Best value at a state = best action today + discounted best future value tomorrow.</p><div class="example">V*(s) = max_a Σ P(s'|s,a) [R(s,a,s') + γV*(s')]</div><p class="note">Think: choose action that gives strong immediate reward and leads to better future states.</p></article>
-<article class="card"><h2>Grid World Animation</h2><canvas id="grid" width="420" height="280"></canvas><p class="note">Blue square is agent. Goal is green cell (+10). Red cell is trap (-10). Agent follows a simple greedy policy.</p><button id="run">Run Episode</button></article></section>
-</main><footer class="footer">Developed by Sajjan Singh.</footer>
-<script>
-const c=document.getElementById('grid'),x=c.getContext('2d');
-const cell=70, cols=6, rows=4; let a={r:0,c:0}; const goal={r:3,c:5}, trap={r:2,c:3};
-function draw(){ x.clearRect(0,0,c.width,c.height); for(let r=0;r<rows;r++) for(let c2=0;c2<cols;c2++){x.strokeStyle='#9ba7c0';x.strokeRect(c2*cell,r*cell,cell,cell);} x.fillStyle='#4ca866';x.fillRect(goal.c*cell+5,goal.r*cell+5,cell-10,cell-10); x.fillStyle='#cf5a4f';x.fillRect(trap.c*cell+5,trap.r*cell+5,cell-10,cell-10); x.fillStyle='#4f79b4';x.fillRect(a.c*cell+12,a.r*cell+12,cell-24,cell-24);} 
-function step(){ if(a.c<goal.c) a.c++; else if(a.r<goal.r) a.r++; if(a.r===trap.r&&a.c===trap.c){a={r:0,c:0};} draw(); }
-draw(); document.getElementById('run').onclick=()=>{a={r:0,c:0}; draw(); let t=0; const id=setInterval(()=>{step(); t++; if((a.r===goal.r&&a.c===goal.c)||t>15) clearInterval(id);},350);};
-</script></body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MDP + Bellman Mini Lesson</title>
+<meta name="description" content="MDP and Bellman mini lesson with upgraded gridworld animation." />
+<meta property="og:title" content="MDP and Bellman Mini Lesson" />
+<meta property="og:description" content="Understand Markov decision processes with intuition, equations, and a visual demo." />
+<link rel="stylesheet" href="../assets/css/style.css" />
+</head><body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="nav"><a class="brand" href="../index.html">RL Atelier</a><button class="nav-toggle" data-nav-toggle aria-expanded="false">Menu</button><nav class="nav-links"><a href="../index.html">Home</a><a href="bandits.html">Bandits</a><a href="mdp.html" aria-current="page">MDP</a><a href="dqn-qlearning.html">DQN / Q</a></nav></div></header>
+<main id="main" class="container">
+<section class="hero"><span class="eyebrow">Track 03</span><h1>Markov Decision Process + Bellman Thinking</h1><p class="subtitle">MDPs define the structure; Bellman equations define the recursive logic for optimal behavior.</p></section>
+<div class="lesson-layout"><aside class="lesson-sidebar card"><h2>Lesson map</h2><ol><li><a href="#intuition">Intuition</a></li><li><a href="#formalism">Formalism</a></li><li><a href="#example">Worked Example</a></li><li><a href="#demo">Interactive Demo</a></li><li><a href="#mistakes">Common Mistakes</a></li><li><a href="#quiz">Quick Quiz</a></li><li><a href="#summary">Summary</a></li></ol></aside><div>
+<section id="intuition" class="lesson-section"><h2>Intuition</h2><p>“Markov” means present state is a sufficient summary. You do not need the full history if state representation is complete.</p></section>
+<section id="formalism" class="lesson-section"><h2>Formalism</h2><p>MDP tuple: (S, A, P, R, γ). Optimal value follows Bellman optimality.</p><div class="callout">V*(s) = max_a Σ_{s'} P(s'|s,a)[R(s,a,s') + γV*(s')].</div></section>
+<section id="example" class="lesson-section"><h2>Worked Example</h2><p>In gridworld, moving toward the goal may require temporarily moving away from immediate reward to avoid traps.</p></section>
+<section id="demo" class="lesson-section"><h2>Interactive Demo</h2><div class="demo-grid"><div><label for="grid-speed">Animation speed</label><select id="grid-speed"><option value="500">Slow</option><option value="320" selected>Medium</option><option value="180">Fast</option></select><button type="button" id="run-grid">Run episode</button><p class="subtitle">Blue: agent, green: goal (+10), red: trap (-10), with slight transition noise.</p></div><div><canvas id="grid" width="420" height="300"></canvas></div></div></section>
+<section id="mistakes" class="lesson-section"><h2>Common Mistakes</h2><div class="callout warn"><ul><li>Assuming Markov property holds without enough state features.</li><li>Ignoring transition uncertainty in planning.</li><li>Confusing policy evaluation with policy improvement.</li></ul></div></section>
+<section id="quiz" class="lesson-section"><h2>Quick Quiz</h2><form class="quiz" data-answer="a"><fieldset><label><input type="radio" name="m-q" value="a" /> Bellman expresses value recursively through next-state values.</label><label><input type="radio" name="m-q" value="b" /> Bellman requires deterministic transitions only.</label><label><input type="radio" name="m-q" value="c" /> Bellman applies only to bandits.</label></fieldset><button type="button" data-quiz-check>Check answer</button><p class="quiz-output"></p></form></section>
+<section id="summary" class="lesson-section"><h2>Summary</h2><p>Once you can think in Bellman recursion, value-based and policy-based algorithms become much easier to reason about.</p><a class="button" href="dqn-qlearning.html">Next: DQN / Q-learning</a></section>
+</div></div></main>
+<footer class="site-footer">Track 03 of 06</footer>
+<script src="../assets/js/main.js"></script>
+</body></html>

@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RL Fundamentals</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
+<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="bandits.html">Next: Bandits</a></nav></div></header>
+<main class="container">
+<section class="hero"><span class="badge">Fundamentals</span><h1>Reinforcement Learning in Very Easy Language</h1><p class="subtitle">RL means learning by trial and feedback. The agent does an action, gets a reward, and improves decisions over time.</p></section>
+<section class="grid cols-2">
+<article class="card"><h2>Core Building Blocks</h2><ul><li><strong>Agent:</strong> learner/decision maker.</li><li><strong>Environment:</strong> world where agent acts.</li><li><strong>State (s):</strong> current situation.</li><li><strong>Action (a):</strong> available choice.</li><li><strong>Reward (r):</strong> immediate score.</li><li><strong>Policy (π):</strong> rule mapping state to action.</li></ul></article>
+<article class="card"><h2>Simple Example: Robot Vacuum</h2><div class="example">State: dirty room. Action: clean left or right. Reward: +1 for cleaned area, -0.2 for battery use. Goal: maximize total long-term reward, not just one step.</div><p class="note">This teaches delayed reward: sometimes you do a small-cost action now to get bigger reward soon.</p></article>
+</section>
+<section class="card"><h2>Return and Discount</h2><p>The return is total future reward: <strong>G = r1 + γr2 + γ²r3 + ...</strong>. If γ is close to 1, the agent cares about future strongly. If γ is low, agent is short-term focused.</p></section>
+</main><footer class="footer">Developed by Sajjan Singh.</footer></body></html>

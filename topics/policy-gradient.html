@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Policy Gradient</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
+<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="dqn-qlearning.html">Prev</a><a href="applications.html">Next</a></nav></div></header>
+<main class="container">
+<section class="hero"><span class="badge">Advanced Topic</span><h1>Policy Gradient in Plain English</h1><p class="subtitle">Instead of learning values first, policy gradient learns a policy directly: how likely each action should be.</p></section>
+<section class="grid cols-2"><article class="card"><h2>Core idea</h2><p>Increase probability of actions that led to good returns; decrease probability of actions that led to bad returns.</p><div class="example">θ ← θ + α ∇θ log πθ(a|s) · G</div></article>
+<article class="card"><h2>Variance Reduction</h2><ul><li>Use a baseline (like value estimate) to stabilize learning.</li><li>Advantage = return - baseline.</li><li>Actor-Critic combines policy and value learning.</li></ul></article></section>
+<section class="card"><h2>Where this shines</h2><p>Continuous control problems like robot joints, drone control, and nuanced motor actions where discrete Q tables are not enough.</p></section>
+</main><footer class="footer">Developed by Sajjan Singh.</footer></body></html>

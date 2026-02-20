@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Q-Learning and DQN</title><link rel="stylesheet" href="../assets/css/style.css"/></head><body>
+<header><div class="nav"><a class="brand" href="../index.html">RL Mastery Hub</a><nav class="nav-links"><a href="mdp.html">Prev</a><a href="policy-gradient.html">Next</a></nav></div></header>
+<main class="container">
+<section class="hero"><span class="badge">Algorithm</span><h1>From Q-Table to Deep Q Network</h1><p class="subtitle">Q-Learning learns action values directly. DQN uses a neural network when states are too many for a table.</p></section>
+<section class="grid cols-2"><article class="card"><h2>Q-Learning Update</h2><div class="example">Q(s,a) ← Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]</div><ul><li>α = learning rate</li><li>γ = discount factor</li><li>Bootstrap target from next state's best action</li></ul></article>
+<article class="card"><h2>Why DQN worked well (easy view)</h2><ul><li><strong>Replay buffer:</strong> random mini-batches reduce correlation.</li><li><strong>Target network:</strong> stable training target.</li><li><strong>Reward clipping:</strong> smoother optimization.</li></ul><p class="note">Good for high-dimensional spaces like images in Atari.</p></article></section>
+<section class="card"><h2>Mini Walkthrough Example</h2><p>State: game frame features. Action: left/right/jump/fire. Reward: game score change. The model predicts Q-values for all actions and picks the max during exploitation. During training, it sometimes takes random action for exploration.</p></section>
+</main><footer class="footer">Developed by Sajjan Singh.</footer></body></html>
